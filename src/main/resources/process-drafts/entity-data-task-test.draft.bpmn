@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:jmix="http://jmix.io/schema/bpm/bpmn" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.flowable.org/processdef" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+  <process id="entity-data-task-test" name="Entity data task test" isExecutable="true">
+    <startEvent id="startEvent1" name="Start process">
+      <extensionElements>
+        <jmix:formData type="input-dialog" openMode="DIALOG">
+          <jmix:formFields>
+            <jmix:formField id="orderNum" caption="Order #" type="string" editable="true" required="false" />
+          </jmix:formFields>
+        </jmix:formData>
+      </extensionElements>
+      <outgoing>Flow_1bithad</outgoing>
+    </startEvent>
+    <sequenceFlow id="Flow_1bithad" sourceRef="startEvent1" targetRef="Activity_130hemh" />
+    <serviceTask id="Activity_130hemh" flowable:type="jmix-create-entity">
+      <extensionElements>
+        <flowable:field name="entityName">
+          <flowable:string>smpl_User</flowable:string>
+        </flowable:field>
+        <flowable:field name="resultVariable">
+          <flowable:string>user</flowable:string>
+        </flowable:field>
+        <flowable:field name="entityAttributes">
+          <flowable:string>[{"name":"email","valueType":"springBean","value":"${smpl_MyBean.getEmail(admin)}","springBean":{"beanName":"smpl_MyBean","methodName":"getEmail","methodParams":[{"name":"username","type":"java.lang.String","isVariable":true,"value":"admin"}]}}]</flowable:string>
+        </flowable:field>
+      </extensionElements>
+      <incoming>Flow_1bithad</incoming>
+      <outgoing>Flow_1cee931</outgoing>
+    </serviceTask>
+    <sequenceFlow id="Flow_1cee931" sourceRef="Activity_130hemh" targetRef="Activity_1ofx23d" />
+    <serviceTask id="Activity_1ofx23d" flowable:type="jmix-send-email">
+      <extensionElements>
+        <flowable:field name="to">
+          <flowable:string>${email}, manager@company.com</flowable:string>
+        </flowable:field>
+        <flowable:field name="cc">
+          <flowable:string>${smpl_MyBean.getEmail(initiator)}</flowable:string>
+        </flowable:field>
+        <flowable:field name="bcc">
+          <flowable:string>admin@company.com</flowable:string>
+        </flowable:field>
+        <flowable:field name="subject">
+          <flowable:string>Process started</flowable:string>
+        </flowable:field>
+        <flowable:field name="from">
+          <flowable:string>no-replay@company.cpm</flowable:string>
+        </flowable:field>
+        <flowable:field name="content">
+          <flowable:string>A new process has been started by ${initiator}</flowable:string>
+        </flowable:field>
+        <flowable:field name="contentType">
+          <flowable:string>text/html; charset=UTF-8</flowable:string>
+        </flowable:field>
+        <flowable:field name="sendAsync">
+          <flowable:string>true</flowable:string>
+        </flowable:field>
+        <flowable:field name="attachments">
+          <flowable:string>[{"name":"order.pdf","expression":"Document content"}]</flowable:string>
+        </flowable:field>
+      </extensionElements>
+      <incoming>Flow_1cee931</incoming>
+    </serviceTask>
+    <userTask id="Activity_0s3qbkj">
+      <extensionElements>
+        <jmix:formData type="input-dialog" openMode="DIALOG" />
+      </extensionElements>
+    </userTask>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_process">
+    <bpmndi:BPMNPlane id="BPMNPlane_process" bpmnElement="entity-data-task-test">
+      <bpmndi:BPMNShape id="BPMNShape_startEvent1" bpmnElement="startEvent1">
+        <omgdc:Bounds x="150" y="150" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="136" y="193" width="65" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0v753x7_di" bpmnElement="Activity_130hemh">
+        <omgdc:Bounds x="240" y="128" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1so35a0_di" bpmnElement="Activity_1ofx23d">
+        <omgdc:Bounds x="400" y="128" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0sgngon_di" bpmnElement="Activity_0s3qbkj">
+        <omgdc:Bounds x="570" y="128" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1bithad_di" bpmnElement="Flow_1bithad">
+        <omgdi:waypoint x="186" y="168" />
+        <omgdi:waypoint x="240" y="168" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cee931_di" bpmnElement="Flow_1cee931">
+        <omgdi:waypoint x="340" y="168" />
+        <omgdi:waypoint x="400" y="168" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:jmix="http://jmix.io/schema/bpm/bpmn" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.flowable.org/processdef" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+  <process id="failed-job-example" name="Failed job example" isExecutable="true">
+    <startEvent id="Event_17nmi20">
+      <extensionElements>
+        <jmix:formData type="input-dialog" openMode="DIALOG">
+          <jmix:formFields>
+            <jmix:formField id="param" caption="Param" type="string" editable="true" required="false" />
+          </jmix:formFields>
+        </jmix:formData>
+      </extensionElements>
+      <outgoing>Flow_1r0gl09</outgoing>
+    </startEvent>
+    <sequenceFlow id="Flow_1r0gl09" sourceRef="Event_17nmi20" targetRef="Activity_1gh0yiw" />
+    <serviceTask id="Activity_1gh0yiw" name="Service task" flowable:async="true" flowable:expression="${smpl_MyBean.execute(param)}" jmix:taskType="springBean" jmix:beanName="smpl_MyBean">
+      <extensionElements>
+        <flowable:failedJobRetryTimeCycle>R3/PT1M</flowable:failedJobRetryTimeCycle>
+        <jmix:springBean beanName="smpl_MyBean" methodName="execute">
+          <jmix:methodParam name="param" type="java.lang.String" isVariable="true">param</jmix:methodParam>
+        </jmix:springBean>
+      </extensionElements>
+      <incoming>Flow_1r0gl09</incoming>
+      <outgoing>Flow_0f1bb5k</outgoing>
+    </serviceTask>
+    <sequenceFlow id="Flow_0f1bb5k" sourceRef="Activity_1gh0yiw" targetRef="Activity_0gnby3p" />
+    <userTask id="Activity_0gnby3p" name="User task" flowable:assignee="admin" jmix:assigneeSource="expression" jmix:assigneeValue="admin">
+      <incoming>Flow_0f1bb5k</incoming>
+      <outgoing>Flow_0zbw784</outgoing>
+    </userTask>
+    <endEvent id="Event_1q3qxs7">
+      <incoming>Flow_0zbw784</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_0zbw784" sourceRef="Activity_0gnby3p" targetRef="Event_1q3qxs7">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="userTaskOutcome" />
+      </extensionElements>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_process">
+    <bpmndi:BPMNPlane id="BPMNPlane_process" bpmnElement="failed-job-example">
+      <bpmndi:BPMNShape id="Event_17nmi20_di" bpmnElement="Event_17nmi20">
+        <omgdc:Bounds x="182" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_029fmos_di" bpmnElement="Activity_1gh0yiw">
+        <omgdc:Bounds x="270" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_15p89ln_di" bpmnElement="Activity_0gnby3p">
+        <omgdc:Bounds x="430" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1q3qxs7_di" bpmnElement="Event_1q3qxs7">
+        <omgdc:Bounds x="592" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1r0gl09_di" bpmnElement="Flow_1r0gl09">
+        <omgdi:waypoint x="218" y="200" />
+        <omgdi:waypoint x="270" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0f1bb5k_di" bpmnElement="Flow_0f1bb5k">
+        <omgdi:waypoint x="370" y="200" />
+        <omgdi:waypoint x="430" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zbw784_di" bpmnElement="Flow_0zbw784">
+        <omgdi:waypoint x="530" y="200" />
+        <omgdi:waypoint x="592" y="200" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
